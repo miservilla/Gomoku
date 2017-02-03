@@ -29,6 +29,7 @@ public class Gomoku implements GomokuModel{
 
     @Override
     public Outcome playAtLocation(int i, int i1) {
+        gomokuBoard[i][i1] = "X";
         return Outcome.GAME_NOT_OVER;
     }
 
