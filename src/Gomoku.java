@@ -1,12 +1,14 @@
 import cs251.lab3.GomokuModel;
 
+
 /**
  * @author Michael Servilla
  * @version date 2017-02-01
  */
 public class Gomoku implements GomokuModel{
-//    private String EMPTY = "-";
-    private String[][] gomokuBoard = new String[getNumRows()][getNumCols()];
+    private Character[][] gomokuBoard = new Character[getNumRows()][getNumCols()];
+    private int setPlayer = 0;
+
 
 
     @Override
@@ -29,7 +31,7 @@ public class Gomoku implements GomokuModel{
 
     @Override
     public Outcome playAtLocation(int i, int i1) {
-        gomokuBoard[i][i1] = "X";
+        gomokuBoard[i][i1] = Square.CROSS.toChar();
         return Outcome.GAME_NOT_OVER;
     }
 
@@ -37,7 +39,7 @@ public class Gomoku implements GomokuModel{
     public void startNewGame() {
         for (int row = 0; row < getNumRows(); row++) {
             for (int column = 0; column < getNumCols(); column++) {
-                gomokuBoard[row][column] = "-";
+                gomokuBoard[row][column] = Square.EMPTY.toChar();
             }
         }
     }
