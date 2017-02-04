@@ -31,7 +31,14 @@ public class Gomoku implements GomokuModel{
 
     @Override
     public Outcome playAtLocation(int i, int i1) {
-        gomokuBoard[i][i1] = Square.CROSS.toChar();
+        while (gomokuBoard[i][i1] == Square.EMPTY.toChar()) {
+            if (setPlayer % 2 == 0) {
+                gomokuBoard[i][i1] = Square.RING.toChar();
+            } else {
+                gomokuBoard[i][i1] = Square.CROSS.toChar();
+            }
+            setPlayer++;
+        }
         return Outcome.GAME_NOT_OVER;
     }
 
