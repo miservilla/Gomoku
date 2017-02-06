@@ -2,6 +2,8 @@
   <dictionary name="miservilla">
     <words>
       <w>gomoku</w>
+      <w>xloc</w>
+      <w>yloc</w>
     </words>
   </dictionary>
 </component>

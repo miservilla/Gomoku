@@ -14,20 +14,17 @@ public class Gomoku implements GomokuModel{
 
     @Override
     public int getNumCols() {
-        int numCols = GomokuModel.DEFAULT_NUM_COLS;
-        return numCols;
+        return GomokuModel.DEFAULT_NUM_COLS;
     }
 
     @Override
     public int getNumRows() {
-        int numRows = GomokuModel.DEFAULT_NUM_ROWS;
-        return numRows;
+        return GomokuModel.DEFAULT_NUM_ROWS;
     }
 
     @Override
     public int getNumInLineForWin() {
-        int numInLineForWin = GomokuModel.SQUARES_IN_LINE_FOR_WIN;
-        return numInLineForWin;
+        return GomokuModel.SQUARES_IN_LINE_FOR_WIN;
     }
 
     @Override
@@ -76,13 +73,12 @@ public class Gomoku implements GomokuModel{
     public void setComputerPlayer(String s) {
 
     }
-    public void winDetectHorizontal(int yloc, int xloc, char currentPlayer) {
+    private void winDetectHorizontal(int yloc, int xloc, char currentPlayer) {
         int x = xloc;
         while (x > 0 && x > (xloc -
                 (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
             x--;
         }
-        System.out.println(x);
         int locToStop = xloc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
         int winCount = 0;
         while (x < locToStop && x < GomokuModel.DEFAULT_NUM_COLS) {
@@ -96,16 +92,15 @@ public class Gomoku implements GomokuModel{
             }
         }
     }
-    public void winDetectVertical(int yloc, int xloc, char currentPlayer) {
+    private void winDetectVertical(int yloc, int xloc, char currentPlayer) {
         int y = yloc;
         while (y > 0 && y > (yloc -
                 (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
             y--;
         }
-        System.out.println(y);
         int locToStop = yloc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
         int winCount = 0;
-        while (y < locToStop && y < GomokuModel.DEFAULT_NUM_COLS) {
+        while (y < locToStop && y < GomokuModel.DEFAULT_NUM_ROWS) {
             if (gomokuBoard[y][xloc] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
