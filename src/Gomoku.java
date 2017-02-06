@@ -42,6 +42,7 @@ public class Gomoku implements GomokuModel{
         //Need to check for win here!!
         winDetectHorizontal(i, i1, currentPlayer);
         winDetectVertical(i, i1, currentPlayer);
+        winDetectPositiveDiagonal(i, i1, currentPlayer);
         if (!getBoardString().contains("-")) { //Check for draw.
             return Outcome.DRAW;
         }
@@ -110,6 +111,31 @@ public class Gomoku implements GomokuModel{
                 break;
             }
         }
+    }
+    private void winDetectPositiveDiagonal(int yloc, int xloc,
+                                           char currentPlayer) {
+        int y = yloc;
+        int x = xloc;
+        while (y > 0 && y > (yloc -
+                (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1)) && x > 0 && x >
+                (xloc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
+            y++;
+            x--;
+        }
+        int ylocToStop = yloc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int winCount = 0;
+        while (y < ylocToStop && y < GomokuModel.DEFAULT_NUM_ROWS) {
+            if (gomokuBoard[y][x] == currentPlayer) {
+                winCount++;
+            } else winCount = 0;
+            y--;
+            x++;
+            if (winCount == GomokuModel.SQUARES_IN_LINE_FOR_WIN) {
+                System.out.println(currentPlayer + " wins!!!!");
+                break;
+            }
+        }
+
     }
 
 
