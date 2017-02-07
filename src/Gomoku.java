@@ -1,6 +1,7 @@
 import cs251.lab3.GomokuGUI;
 import cs251.lab3.GomokuModel;
 
+import java.util.Scanner;
 
 
 /**
@@ -11,9 +12,17 @@ public class Gomoku implements GomokuModel{
     public static void main(String[] args) {
         Gomoku game = new Gomoku();
 
-        if (args.length > 0) {
-            game.setComputerPlayer(args[0]);
+        Scanner ask = new Scanner(System.in);
+        System.out.println("Do you want to play the computer? " +
+                "Y or N");
+        String answer = ask.next();
+        if (answer.toUpperCase().equals("Y")) {
+            game.setComputerPlayer("COMPUTER");
         }
+
+//        if (args.length > 0) {
+//            game.setComputerPlayer(args[0]);
+//        }
         GomokuGUI.showGUI(game);
     }
 
@@ -38,6 +47,12 @@ public class Gomoku implements GomokuModel{
 
     @Override
     public Outcome playAtLocation(int row, int column) {
+        getCurrentPlayer(row, column);
+        Outcome a = winDetection(row, column, currentPlayer);
+        return a;
+    }
+
+    private char getCurrentPlayer(int row, int column) {
         while (gomokuBoard[row][column] == Square.EMPTY.toChar()) {
             if (setPlayer % 2 == 0) {
                 gomokuBoard[row][column] = Square.RING.toChar();
@@ -47,8 +62,10 @@ public class Gomoku implements GomokuModel{
             currentPlayer = gomokuBoard[row][column];
             setPlayer++;
         }
-        //Need to check for win here!!
+        return gomokuBoard[row][column];
+    }
 
+    private Outcome winDetection(int row, int column, char currentPlayer) {
         Outcome a = winDetectHorizontal(row, column, currentPlayer);
         if (a != Outcome.GAME_NOT_OVER) {
             setPlayer++;
@@ -98,8 +115,15 @@ public class Gomoku implements GomokuModel{
 
     @Override
     public void setComputerPlayer(String s) {
+        if (s.toUpperCase().equals("Y")) {
+           Outcome a = winDetection(15, 15, 'x');
 
+        }
+        char computerPlayer = 'x';
+        char humanPlayer = 'o';
+        playAtLocation(15, 14);
     }
+
     private Outcome winDetectHorizontal(int rowLoc, int columnLoc,
                                         char currentPlayer) {
         int x = columnLoc;
