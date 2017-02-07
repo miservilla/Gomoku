@@ -52,7 +52,8 @@ public class Gomoku implements GomokuModel{
     @Override
     public Outcome playAtLocation(int row, int column) {
         if (answer.toUpperCase().equals("Y")) {
-            getHumanMove(row, column);
+            currentPlayer = Square.RING.toChar();
+            gomokuBoard[row][column] = currentPlayer;
             Outcome a = winDetection(row, column, currentPlayer);
             if (a.equals(Outcome.RING_WINS)) {
                 return a;
@@ -115,17 +116,19 @@ public class Gomoku implements GomokuModel{
     }
 
     private char retardedComputer() {
-        int row = rand.nextInt(getNumRows());
-        int column = rand.nextInt(getNumCols());
-        while (gomokuBoard[row][column] == Square.EMPTY.toChar())
-            gomokuBoard[row][column]
-                    = Square.CROSS.toChar();
+        int row;
+        int column;
+        do {
+            row = rand.nextInt(getNumRows());
+            column = rand.nextInt(getNumCols());
+        } while (gomokuBoard[row][column] != Square.EMPTY.toChar());
+
+        gomokuBoard[row][column] = Square.CROSS.toChar();
         return gomokuBoard[row][column];
     }
 
     private char getHumanMove(int row, int column) {
-        while (gomokuBoard[row][column] == Square.EMPTY.toChar()) {
-            gomokuBoard[row][column] = Square.RING.toChar();
+        while (gomokuBoard[row][column] != Square.EMPTY.toChar()) {
         }
         return gomokuBoard[row][column];
     }
@@ -188,6 +191,9 @@ public class Gomoku implements GomokuModel{
         int locToStop = rowLoc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
         int winCount = 0;
         while (y < locToStop && y < GomokuModel.DEFAULT_NUM_ROWS) {
+            System.out.println("Current player = " + currentPlayer +
+            ", current board position = " + gomokuBoard[y][columnLoc] +
+            ", " + y + " " + columnLoc);
             if (gomokuBoard[y][columnLoc] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
