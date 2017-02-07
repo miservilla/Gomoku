@@ -28,21 +28,21 @@ public class Gomoku implements GomokuModel{
     }
 
     @Override
-    public Outcome playAtLocation(int i, int i1) {
-        System.out.println(i + " " + i1);
-        while (gomokuBoard[i][i1] == Square.EMPTY.toChar()) {
+    public Outcome playAtLocation(int row, int column) {
+        System.out.println(row + " " + column);
+        while (gomokuBoard[row][column] == Square.EMPTY.toChar()) {
             if (setPlayer % 2 == 0) {
-                gomokuBoard[i][i1] = Square.RING.toChar();
+                gomokuBoard[row][column] = Square.RING.toChar();
             } else {
-                gomokuBoard[i][i1] = Square.CROSS.toChar();
+                gomokuBoard[row][column] = Square.CROSS.toChar();
             }
-            currentPlayer = gomokuBoard[i][i1];
+            currentPlayer = gomokuBoard[row][column];
             setPlayer++;
         }
         //Need to check for win here!!
-        winDetectHorizontal(i, i1, currentPlayer);
-        winDetectVertical(i, i1, currentPlayer);
-        winDetectPositiveDiagonal(i, i1, currentPlayer);
+        winDetectHorizontal(row, column, currentPlayer);
+        winDetectVertical(row, column, currentPlayer);
+        winDetectPositiveDiagonal(row, column, currentPlayer);
         if (!getBoardString().contains("-")) { //Check for draw.
             return Outcome.DRAW;
         }
@@ -74,16 +74,16 @@ public class Gomoku implements GomokuModel{
     public void setComputerPlayer(String s) {
 
     }
-    private void winDetectHorizontal(int yloc, int xloc, char currentPlayer) {
-        int x = xloc;
-        while (x > 0 && x > (xloc -
+    private void winDetectHorizontal(int rowLoc, int columnLoc, char currentPlayer) {
+        int x = columnLoc;
+        while (x > 0 && x > (columnLoc -
                 (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
             x--;
         }
-        int locToStop = xloc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int locToStop = columnLoc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
         int winCount = 0;
         while (x < locToStop && x < GomokuModel.DEFAULT_NUM_COLS) {
-            if (gomokuBoard[yloc][x] == currentPlayer) {
+            if (gomokuBoard[rowLoc][x] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
             x++;
@@ -93,16 +93,16 @@ public class Gomoku implements GomokuModel{
             }
         }
     }
-    private void winDetectVertical(int yloc, int xloc, char currentPlayer) {
-        int y = yloc;
-        while (y > 0 && y > (yloc -
+    private void winDetectVertical(int rowLoc, int columnLoc, char currentPlayer) {
+        int y = rowLoc;
+        while (y > 0 && y > (rowLoc -
                 (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
             y--;
         }
-        int locToStop = yloc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int locToStop = rowLoc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
         int winCount = 0;
         while (y < locToStop && y < GomokuModel.DEFAULT_NUM_ROWS) {
-            if (gomokuBoard[y][xloc] == currentPlayer) {
+            if (gomokuBoard[y][columnLoc] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
             y++;
@@ -112,19 +112,22 @@ public class Gomoku implements GomokuModel{
             }
         }
     }
-    private void winDetectPositiveDiagonal(int yloc, int xloc,
+    private void winDetectPositiveDiagonal(int rowLoc, int columnLoc,
                                            char currentPlayer) {
-        int y = yloc;
-        int x = xloc;
-        while (y > 0 && y > (yloc -
+        int y = rowLoc;
+        int x = columnLoc;
+        while (y > 0 && y > (rowLoc -
                 (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1)) && x > 0 && x >
-                (xloc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
+                (columnLoc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
             y++;
             x--;
         }
-        int ylocToStop = yloc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int rowLocToStop = rowLoc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int columnLocToStop = columnLoc + (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
         int winCount = 0;
-        while (y < ylocToStop && y < GomokuModel.DEFAULT_NUM_ROWS) {
+        while (y > rowLocToStop && y < GomokuModel.DEFAULT_NUM_ROWS &&
+                x < columnLocToStop && x < GomokuModel.DEFAULT_NUM_COLS &&
+                y >= 0) {
             if (gomokuBoard[y][x] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
