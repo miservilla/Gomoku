@@ -43,6 +43,7 @@ public class Gomoku implements GomokuModel{
         winDetectHorizontal(row, column, currentPlayer);
         winDetectVertical(row, column, currentPlayer);
         winDetectPositiveDiagonal(row, column, currentPlayer);
+        winDetectNegativeDiagonal(row, column, currentPlayer);
         if (!getBoardString().contains("-")) { //Check for draw.
             return Outcome.DRAW;
         }
@@ -133,6 +134,34 @@ public class Gomoku implements GomokuModel{
             } else winCount = 0;
             y--;
             x++;
+            if (winCount == GomokuModel.SQUARES_IN_LINE_FOR_WIN) {
+                System.out.println(currentPlayer + " wins!!!!");
+                break;
+            }
+        }
+
+    }
+    private void winDetectNegativeDiagonal(int rowLoc, int columnLoc,
+                                           char currentPlayer) {
+        int y = rowLoc;
+        int x = columnLoc;
+        while (y > 0 && y < (rowLoc +
+                (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1)) && x > 0 && x >
+                (columnLoc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN - 1))) {
+            y++;
+            x++;
+        }
+        int rowLocToStop = rowLoc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int columnLocToStop = columnLoc - (GomokuModel.SQUARES_IN_LINE_FOR_WIN);
+        int winCount = 0;
+        while (y > rowLocToStop && y < GomokuModel.DEFAULT_NUM_ROWS &&
+                x > columnLocToStop && x < GomokuModel.DEFAULT_NUM_COLS &&
+                x >= 0 && y >= 0) {
+            if (gomokuBoard[y][x] == currentPlayer) {
+                winCount++;
+            } else winCount = 0;
+            y--;
+            x--;
             if (winCount == GomokuModel.SQUARES_IN_LINE_FOR_WIN) {
                 System.out.println(currentPlayer + " wins!!!!");
                 break;
