@@ -79,19 +79,19 @@ public class Gomoku implements GomokuModel{
                 return Outcome.GAME_NOT_OVER;
             }
             gomokuBoard[row][column] = currentPlayer;
-            Outcome a = winDetection(row, column, currentPlayer);
-            if (a.equals(Outcome.RING_WINS)) {
-                return a;
+            Outcome outcomeResult = winDetection(row, column, currentPlayer);
+            if (outcomeResult.equals(Outcome.RING_WINS)) {
+                return outcomeResult;
             }
-            a = copyCatComputer(row, column);
-            if (a.equals(Outcome.CROSS_WINS)) {
-                return a;
+            outcomeResult = copyCatComputer(row, column);
+            if (outcomeResult.equals(Outcome.CROSS_WINS)) {
+                return outcomeResult;
             }
-            return a;
+            return outcomeResult;
         } else {
             getCurrentPlayer(row, column);
-            Outcome a = winDetection(row, column, currentPlayer);
-            return a;
+            Outcome outcomeResult = winDetection(row, column, currentPlayer);
+            return outcomeResult;
         }
     }
 
@@ -231,25 +231,25 @@ public class Gomoku implements GomokuModel{
      * DRAW.
      */
     private Outcome winDetection(int row, int column, char currentPlayer) {
-        Outcome a = winDetectHorizontal(row, column, currentPlayer);
-        if (a != Outcome.GAME_NOT_OVER) {
+        Outcome outcomeResult = winDetectHorizontal(row, column, currentPlayer);
+        if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
-            return a;
+            return outcomeResult;
         }
-        a = winDetectVertical(row, column, currentPlayer);
-        if (a != Outcome.GAME_NOT_OVER) {
+        outcomeResult = winDetectVertical(row, column, currentPlayer);
+        if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
-            return a;
+            return outcomeResult;
         }
-        a = winDetectPositiveDiagonal(row, column, currentPlayer);
-        if (a != Outcome.GAME_NOT_OVER) {
+        outcomeResult = winDetectPositiveDiagonal(row, column, currentPlayer);
+        if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
-            return a;
+            return outcomeResult;
         }
-        a = winDetectNegativeDiagonal(row, column, currentPlayer);
-        if (a != Outcome.GAME_NOT_OVER) {
+        outcomeResult = winDetectNegativeDiagonal(row, column, currentPlayer);
+        if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
-            return a;
+            return outcomeResult;
         }
         if (!getBoardString().contains("-")) { //Check for draw.
             return Outcome.DRAW;
