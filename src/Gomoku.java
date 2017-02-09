@@ -5,7 +5,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 
-/**
+/**Program to play Gomoku, eiter with partner or against computer.
+ * Class 251
  * @author Michael Servilla
  * @version date 2017-02-01
  */
@@ -14,7 +15,7 @@ public class Gomoku implements GomokuModel{
 
     /**
      *
-     * @param args
+     * @param args Not used for the program, scanner used instead for input.
      */
     public static void main(String[] args) {
         Gomoku game = new Gomoku();
@@ -36,8 +37,8 @@ public class Gomoku implements GomokuModel{
     Random rand = new Random();
 
     /**
-     *
-     * @return
+     *Accessor to obtain default number of columns (board width).
+     * @return Returns default column value.
      */
     @Override
     public int getNumCols() {
@@ -45,8 +46,8 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @return
+     *Accessor to obtain default number of rows (board height).
+     * @return Returns default row value.
      */
     @Override
     public int getNumRows() {
@@ -54,8 +55,9 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @return
+     *Accessor to obtain default number of similar squares in a row to win the
+     * game.
+     * @return Returns default values of similar squares in a row to win.
      */
     @Override
     public int getNumInLineForWin() {
@@ -63,10 +65,11 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param row
-     * @param column
-     * @return
+     *Method to obtain click event location and to return outcome (WIN, DRAW, or
+     * GAME NOT OVER).
+     * @param row Row location of event.
+     * @param column Column location of event.
+     * @return Returns outcome of particular event.
      */
     @Override
     public Outcome playAtLocation(int row, int column) {
@@ -93,10 +96,12 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param row
-     * @param column
-     * @return
+     *Method to determine current player (Ring or Cross) when not playing
+     *  against the computer.
+     * @param row Row location of square for particular player.
+     * @param column Column location of square for particular player.
+     * @return Returns the location of square that is denoted with either Ring
+     * or cross.
      */
     private char getCurrentPlayer(int row, int column) {
         while (gomokuBoard[row][column] == Square.EMPTY.toChar()) {
@@ -112,7 +117,7 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
+     *Method to fill board with empty squares (dashes).
      */
     @Override
     public void startNewGame() {
@@ -124,8 +129,8 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @return
+     * Method to create string representation of board.
+     * @return Returns single string array with \n used to denote next row.
      */
     @Override
     public String getBoardString() {
@@ -155,8 +160,8 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @return
+     * Method for computer player to choose random moves.
+     * @return Returns random location with cross.
      */
     private char retardedComputer() {
         int row;
@@ -171,10 +176,11 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param row
-     * @param column
-     * @return
+     *Method for slightly more advanced computer player using location of
+     * opponents click to determine its move.
+     * @param row Row information from previous opponents click event.
+     * @param column Column information from previous opponents click event.
+     * @return Returns outcome of its move by calling win detection.
      */
     private Outcome copyCatComputer(int row, int column) {
         int y = row;
@@ -215,11 +221,14 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param row
-     * @param column
-     * @param currentPlayer
-     * @return
+     * Method to determine if a given move has resulted in a win. This method
+     * call 4 additional methods for win detection in each of the given
+     * directions. Will also check for draw on each move.
+     * @param row Row information from current click event.
+     * @param column Column information from current click event.
+     * @param currentPlayer Current player associated with click event.
+     * @return Returns outcome WIN if win detected, otherwise GAME NOT OVER or
+     * DRAW.
      */
     private Outcome winDetection(int row, int column, char currentPlayer) {
         Outcome a = winDetectHorizontal(row, column, currentPlayer);
@@ -249,11 +258,14 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param rowLoc
-     * @param columnLoc
-     * @param currentPlayer
-     * @return
+     * Win detection algorithm for horizontal check. Checks back 4 locations
+     * from current click event location, and then increments through total of 2
+     * times default number - 1.
+     * @param rowLoc Row information from current click event.
+     * @param columnLoc Column information from current click event.
+     * @param currentPlayer Current player associated with click event.
+     * @return Returns outcome WIN if win detected with associated player, ring
+     * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectHorizontal(int rowLoc, int columnLoc,
                                         char currentPlayer) {
@@ -279,11 +291,14 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param rowLoc
-     * @param columnLoc
-     * @param currentPlayer
-     * @return
+     * Win detection algorithm for verticle check. Checks back 4 locations
+     * from current click event location, and then increments through total of 2
+     * times default number - 1.
+     * @param rowLoc Row information from current click event.
+     * @param columnLoc Column information from current click event.
+     * @param currentPlayer Current player associated with click event.
+     * @return Returns outcome WIN if win detected with associated player, ring
+     * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectVertical(int rowLoc, int columnLoc,
                                       char currentPlayer) {
@@ -309,11 +324,14 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param rowLoc
-     * @param columnLoc
-     * @param currentPlayer
-     * @return
+     * Win detection algorithm for positive diagonal check. Checks back 4
+     * locations from current click event location, and then increments through
+     * total of 2 times default number - 1.
+     * @param rowLoc Row information from current click event.
+     * @param columnLoc Column information from current click event.
+     * @param currentPlayer Current player associated with click event.
+     * @return Returns outcome WIN if win detected with associated player, ring
+     * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectPositiveDiagonal(int rowLoc, int columnLoc,
                                            char currentPlayer) {
@@ -347,11 +365,14 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
-     * @param rowLoc
-     * @param columnLoc
-     * @param currentPlayer
-     * @return
+     * Win detection algorithm for negative diagonal check. Checks back 4
+     * locations from current click event location, and then increments through
+     * total of 2 times default number - 1.
+     * @param rowLoc Row information from current click event.
+     * @param columnLoc Column information from current click event.
+     * @param currentPlayer Current player associated with click event.
+     * @return Returns outcome WIN if win detected with associated player, ring
+     * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectNegativeDiagonal(int rowLoc, int columnLoc,
                                            char currentPlayer) {
