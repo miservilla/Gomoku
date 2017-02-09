@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 
-/**Program to play Gomoku, eiter with partner or against computer.
+/**Program to play Gomoku, either with partner or against computer.
  * Class 251
  * @author Michael Servilla
  * @version date 2017-02-01
@@ -73,6 +73,7 @@ public class Gomoku implements GomokuModel{
      */
     @Override
     public Outcome playAtLocation(int row, int column) {
+        //CLEAN THIS METHOD UP.
         if (answer.toUpperCase().equals("Y")) {
                                 currentPlayer = Square.RING.toChar();
             while (gomokuBoard[row][column] != Square.EMPTY.toChar()) {
@@ -90,14 +91,13 @@ public class Gomoku implements GomokuModel{
             return outcomeResult;
         } else {
             getCurrentPlayer(row, column);
-            Outcome outcomeResult = winDetection(row, column, currentPlayer);
-            return outcomeResult;
+            return winDetection(row, column, currentPlayer);
         }
     }
 
     /**
      *Method to determine current player (Ring or Cross) when not playing
-     *  against the computer.
+     *  against the computer. Alternates between ring or cross.
      * @param row Row location of square for particular player.
      * @param column Column location of square for particular player.
      * @return Returns the location of square that is denoted with either Ring
@@ -206,18 +206,6 @@ public class Gomoku implements GomokuModel{
         gomokuBoard[row][column] = Square.CROSS.toChar();
         currentPlayer = Square.CROSS.toChar();
         return winDetection(row, column, currentPlayer);
-    }
-
-    /**
-     *
-     * @param row
-     * @param column
-     * @return
-     */
-    private char getHumanMove(int row, int column) {
-        while (gomokuBoard[row][column] == Square.EMPTY.toChar()) {
-        }
-        return gomokuBoard[row][column];
     }
 
     /**
