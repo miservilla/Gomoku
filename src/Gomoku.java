@@ -126,10 +126,8 @@ public class Gomoku implements GomokuModel{
                     return outcomeResults;
                 }
                 return outcomeResults;
-            default:
-                getCurrentPlayer(row, column); //To play against another human.
-                return winDetection(row, column, currentPlayer);
         }
+        return Outcome.GAME_NOT_OVER;
     }
     /**
      *Method to determine current player (Ring or Cross) when not playing
@@ -200,6 +198,9 @@ public class Gomoku implements GomokuModel{
      * @return Returns random location with cross.
      */
     private Outcome randomComputer() {
+        if (!getBoardString().contains("-")) { //Check for draw.
+            return Outcome.DRAW;
+        }
         int row;
         int column;
         do {
@@ -219,6 +220,9 @@ public class Gomoku implements GomokuModel{
      * @return Returns outcome of its move by calling win detection.
      */
     private Outcome copyCatComputer(int row, int column) {
+        if (!getBoardString().contains("-")) { //Check for draw.
+            return Outcome.DRAW;
+        }
         int y = row;
         int y1 = row;
         int y2 = row;
