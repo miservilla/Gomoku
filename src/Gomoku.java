@@ -4,7 +4,6 @@ import cs251.lab3.GomokuModel;
 import java.util.Random;
 import java.util.Scanner;
 
-
 /**
  * Program to play Gomoku, either with partner or against computer.
  * Class 251
@@ -12,8 +11,6 @@ import java.util.Scanner;
  * @version date 2017-02-01
  */
 public class Gomoku implements GomokuModel{
-    private static int answer;
-
     /**
      * Main method to start the game.
      * @param args Not used for the program, scanner used instead for input.
@@ -28,12 +25,13 @@ public class Gomoku implements GomokuModel{
         System.out.println("2. Play against random move computer.");
         System.out.println("3. Play against a little annoying, " +
                 "copy cat, computer.");
-        answer = ask.nextInt();
-        while (answer != 1 || answer != 2 || answer != 3) {
-            System.out.println("Pick your play, choose a number 1, 2, or 3.");
-            answer = ask.nextInt();
-        }
+        String  stringNumber = ask.next();
 
+        //Input error correction.
+        while (!TryParseIn(stringNumber)) {
+            System.out.println("Pick your play, choose a number 1, 2, or 3.");
+            stringNumber = ask.next();
+        }
         GomokuGUI.showGUI(game);
     }
 
@@ -41,7 +39,29 @@ public class Gomoku implements GomokuModel{
     private int setPlayer = 0;
     private char currentPlayer;
     private Random rand = new Random();
+    private static int answer;
 
+    /**
+     * Method to take string input and parse to integer. Will throw exception if
+     * not able to parse to integer, or return false if value is not one of the
+     * available choices.
+     * @param number String value entered from the command line.
+     * @return Returns either true if value can be parsed to a number and is one
+     * of the available choices, or false if not true.
+     */
+    private static boolean TryParseIn(String number) {
+        try {
+            answer = Integer.parseInt(number);
+            while (answer != 1 && answer != 2 && answer != 3) {
+                System.out.println("Value is not a valid choice!");
+                return false;
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("Value can't be parsed as a number!");
+            return false;
+        }
+    }
     /**
      *Accessor to obtain default number of columns (board width).
      * @return Returns default column value.
@@ -50,7 +70,6 @@ public class Gomoku implements GomokuModel{
     public int getNumCols() {
         return GomokuModel.DEFAULT_NUM_COLS;
     }
-
     /**
      *Accessor to obtain default number of rows (board height).
      * @return Returns default row value.
@@ -59,7 +78,6 @@ public class Gomoku implements GomokuModel{
     public int getNumRows() {
         return  GomokuModel.DEFAULT_NUM_ROWS;
     }
-
     /**
      *Accessor to obtain default number of similar squares in a row to win the
      * game.
@@ -69,7 +87,6 @@ public class Gomoku implements GomokuModel{
     public int getNumInLineForWin() {
         return GomokuModel.SQUARES_IN_LINE_FOR_WIN;
     }
-
     /**
      *Method to obtain click event location and to return outcome (WIN, DRAW, or
      * GAME NOT OVER).
@@ -79,8 +96,6 @@ public class Gomoku implements GomokuModel{
      */
     @Override
     public Outcome playAtLocation(int row, int column) {
-        //CLEAN THIS METHOD UP.
-
         switch (answer) {
             case 1:
                 getCurrentPlayer(row, column); //To play against another human.
@@ -115,28 +130,7 @@ public class Gomoku implements GomokuModel{
                 getCurrentPlayer(row, column); //To play against another human.
                 return winDetection(row, column, currentPlayer);
         }
-//        if (answer.toUpperCase().equals("Y")) {
-//                                currentPlayer = Square.RING.toChar();
-//            while (gomokuBoard[row][column] != Square.EMPTY.toChar()) {
-//                return Outcome.GAME_NOT_OVER;
-//            }
-//            gomokuBoard[row][column] = currentPlayer;
-//            Outcome outcomeResult = winDetection(row, column, currentPlayer);
-//            if (outcomeResult.equals(Outcome.RING_WINS)) {
-//                return outcomeResult;
-//            }
-//            outcomeResult = copyCatComputer(row, column);
-//            if (outcomeResult.equals(Outcome.CROSS_WINS)) {
-//                return outcomeResult;
-//            }
-//            return outcomeResult;
-//        } else {
-//            getCurrentPlayer(row, column); //To play against another human.
-//            return winDetection(row, column, currentPlayer);
     }
-
-
-
     /**
      *Method to determine current player (Ring or Cross) when not playing
      *  against the computer. Alternates between ring or cross.
@@ -157,7 +151,6 @@ public class Gomoku implements GomokuModel{
         }
         return gomokuBoard[row][column];
     }
-
     /**
      *Method to fill board with empty squares (dashes).
      */
@@ -169,7 +162,6 @@ public class Gomoku implements GomokuModel{
             }
         }
     }
-
     /**
      * Method to create string representation of board.
      * @return Returns single string array with \n used to denote next row.
@@ -196,7 +188,6 @@ public class Gomoku implements GomokuModel{
         }
         return Outcome.GAME_NOT_OVER;
     }
-
     /**
      *
      * @param s
@@ -204,8 +195,6 @@ public class Gomoku implements GomokuModel{
     @Override
     public void setComputerPlayer(String s) {
     }
-
-
     /**
      * Method for computer player to choose random moves.
      * @return Returns random location with cross.
@@ -222,7 +211,6 @@ public class Gomoku implements GomokuModel{
         currentPlayer = Square.CROSS.toChar();
         return winDetection(row, column, currentPlayer);
     }
-
     /**
      *Method for slightly more advanced computer player using location of
      * opponents click to determine its move.
@@ -255,7 +243,6 @@ public class Gomoku implements GomokuModel{
         currentPlayer = Square.CROSS.toChar();
         return winDetection(row, column, currentPlayer);
     }
-
     /**
      * Method to determine if a given move has resulted in a win. This method
      * call 4 additional methods for win detection in each of the given
@@ -292,7 +279,6 @@ public class Gomoku implements GomokuModel{
         }
         return Outcome.GAME_NOT_OVER;
     }
-
     /**
      * Win detection algorithm for horizontal check. Checks back 4 locations
      * from current click event location, and then increments through total of 2
@@ -325,9 +311,8 @@ public class Gomoku implements GomokuModel{
         }
         return Outcome.GAME_NOT_OVER;
     }
-
     /**
-     * Win detection algorithm for verticle check. Checks back 4 locations
+     * Win detection algorithm for vertical check. Checks back 4 locations
      * from current click event location, and then increments through total of 2
      * times default number - 1.
      * @param rowLoc Row information from current click event.
@@ -358,7 +343,6 @@ public class Gomoku implements GomokuModel{
         }
         return Outcome.GAME_NOT_OVER;
     }
-
     /**
      * Win detection algorithm for positive diagonal check. Checks back 4
      * locations from current click event location, and then increments through
@@ -399,7 +383,6 @@ public class Gomoku implements GomokuModel{
         }
         return Outcome.GAME_NOT_OVER;
     }
-
     /**
      * Win detection algorithm for negative diagonal check. Checks back 4
      * locations from current click event location, and then increments through
