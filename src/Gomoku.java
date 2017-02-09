@@ -5,7 +5,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 
-/**Program to play Gomoku, either with partner or against computer.
+/**
+ * Program to play Gomoku, either with partner or against computer.
  * Class 251
  * @author Michael Servilla
  * @version date 2017-02-01
@@ -22,12 +23,16 @@ public class Gomoku implements GomokuModel{
 
         //Question to play computer or not.
         Scanner ask = new Scanner(System.in);
-        System.out.println("Pick your play, choose a number." );
+        System.out.println("Pick your play, choose a number 1, 2, or 3.");
         System.out.println("1. Play against another human.");
         System.out.println("2. Play against random move computer.");
         System.out.println("3. Play against a little annoying, " +
                 "copy cat, computer.");
         answer = ask.nextInt();
+        while (answer != 1 || answer != 2 || answer != 3) {
+            System.out.println("Pick your play, choose a number 1, 2, or 3.");
+            answer = ask.nextInt();
+        }
 
         GomokuGUI.showGUI(game);
     }
@@ -43,7 +48,7 @@ public class Gomoku implements GomokuModel{
      */
     @Override
     public int getNumCols() {
-        return 6; //GomokuModel.DEFAULT_NUM_COLS;
+        return GomokuModel.DEFAULT_NUM_COLS;
     }
 
     /**
@@ -52,7 +57,7 @@ public class Gomoku implements GomokuModel{
      */
     @Override
     public int getNumRows() {
-        return  6; //GomokuModel.DEFAULT_NUM_ROWS;
+        return  GomokuModel.DEFAULT_NUM_ROWS;
     }
 
     /**
