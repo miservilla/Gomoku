@@ -14,7 +14,7 @@ public class Gomoku implements GomokuModel{
     private static int answer;
 
     /**
-     *
+     * Main method to start the game.
      * @param args Not used for the program, scanner used instead for input.
      */
     public static void main(String[] args) {
@@ -35,7 +35,7 @@ public class Gomoku implements GomokuModel{
     private char[][] gomokuBoard = new char[getNumRows()][getNumCols()];
     private int setPlayer = 0;
     private char currentPlayer;
-    Random rand = new Random();
+    private Random rand = new Random();
 
     /**
      *Accessor to obtain default number of columns (board width).
@@ -92,11 +92,20 @@ public class Gomoku implements GomokuModel{
                 if (outcomeResults.equals(Outcome.CROSS_WINS)) {
                     return outcomeResults;
                 }
-                return Outcome.GAME_NOT_OVER;
+                return outcomeResults;
             case 3:
-                humanPlayer(row, column);
-                copyCatComputer(row, column);
-                return winDetection(row, column, currentPlayer);
+                while (gomokuBoard[row][column] != Square.EMPTY.toChar()) {
+                    return Outcome.GAME_NOT_OVER;
+                }
+                outcomeResults = humanPlayer(row, column);
+                if (outcomeResults.equals(Outcome.RING_WINS)) {
+                    return outcomeResults;
+                }
+                outcomeResults = copyCatComputer(row, column);
+                if (outcomeResults.equals(Outcome.CROSS_WINS)) {
+                    return outcomeResults;
+                }
+                return outcomeResults;
             default:
                 getCurrentPlayer(row, column); //To play against another human.
                 return winDetection(row, column, currentPlayer);
@@ -223,11 +232,11 @@ public class Gomoku implements GomokuModel{
         int x = column;
         int x1 = column;
         int x2 = column;
-        if (x != 29 && gomokuBoard[y][++x1] == Square.EMPTY.toChar()) {
+        if (x != getNumCols() - 1 && gomokuBoard[y][++x1] == Square.EMPTY.toChar()) {
             column++;
         } else if (x != 0 && gomokuBoard[y][--x2] == Square.EMPTY.toChar()) {
             column--;
-        } else if (y != 29 && gomokuBoard[++y1][x] == Square.EMPTY.toChar()) {
+        } else if (y != getNumRows() - 1 && gomokuBoard[++y1][x] == Square.EMPTY.toChar()) {
             row++;
         } else if (y != 0 && gomokuBoard[--y2][x] == Square.EMPTY.toChar()) {
             row--;
