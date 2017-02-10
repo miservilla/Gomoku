@@ -177,7 +177,8 @@ public class Gomoku implements GomokuModel{
     }
 
     /**
-     *
+     *Method to get human player location when playing against the computer and
+     * then check for win.
      * @param row Row location of square for human player.
      * @param column Column location of square for human player.
      * @return Returns the result of the human player play.
@@ -302,11 +303,13 @@ public class Gomoku implements GomokuModel{
      */
     private Outcome winDetectHorizontal(int rowLoc, int columnLoc,
                                         char currentPlayer) {
+        //This section determines start point for iteration.
         int x = columnLoc;
         while (x > 0 && x > (columnLoc -
                 (getNumInLineForWin() - 1))) {
             x--;
         }
+        //This section determines end point for iteration.
         int locToStop = columnLoc + (getNumInLineForWin());
         int winCount = 0;
         while (x < locToStop && x < getNumCols()) {
@@ -334,11 +337,13 @@ public class Gomoku implements GomokuModel{
      */
     private Outcome winDetectVertical(int rowLoc, int columnLoc,
                                       char currentPlayer) {
+        //This section determines start point for iteration.
         int y = rowLoc;
         while (y > 0 && y > (rowLoc -
                 (getNumInLineForWin() - 1))) {
             y--;
         }
+        //This section determines end point for iteration.
         int locToStop = rowLoc + (getNumInLineForWin());
         int winCount = 0;
         while (y < locToStop && y < getNumRows()) {
@@ -366,6 +371,7 @@ public class Gomoku implements GomokuModel{
      */
     private Outcome winDetectPositiveDiagonal(int rowLoc, int columnLoc,
                                            char currentPlayer) {
+        //This section determines start point for iteration.
         int y = rowLoc;
         int x = columnLoc;
         while ((y < (rowLoc + (getNumInLineForWin() - 1))) &&
@@ -375,6 +381,7 @@ public class Gomoku implements GomokuModel{
             y++;
             x--;
         }
+        //This section determines end point for iteration.
         int rowLocToStop = rowLoc - (getNumInLineForWin() - 1);
         int columnLocToStop = columnLoc +
                 (getNumInLineForWin() - 1);
@@ -406,6 +413,7 @@ public class Gomoku implements GomokuModel{
      */
     private Outcome winDetectNegativeDiagonal(int rowLoc, int columnLoc,
                                            char currentPlayer) {
+        //This section determines start point for iteration.
         int y = rowLoc;
         int x = columnLoc;
         while ((y < (rowLoc + (getNumInLineForWin() - 1))) &&
@@ -415,6 +423,7 @@ public class Gomoku implements GomokuModel{
             y++;
             x++;
         }
+        //This section determines end point for iteration.
         int rowLocToStop = rowLoc - (getNumInLineForWin() - 1);
         int columnLocToStop = columnLoc -
                 (getNumInLineForWin() - 1);
