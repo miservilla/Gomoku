@@ -175,6 +175,13 @@ public class Gomoku implements GomokuModel{
         }
         return boardString.toString();
     }
+
+    /**
+     *
+     * @param row Row location of square for human player.
+     * @param column Column location of square for human player.
+     * @return Returns the result of the human player play.
+     */
     private Outcome humanPlayer(int row, int column) {
         currentPlayer = Square.RING.toChar();
         gomokuBoard[row][column] = currentPlayer;
