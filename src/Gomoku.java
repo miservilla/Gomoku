@@ -99,7 +99,8 @@ public class Gomoku implements GomokuModel{
         switch (answer) {
             case 1:
                 getCurrentPlayer(row, column); //To play against another human.
-                return winDetection(row, column, currentPlayer);
+                return winDetection(row, column, currentPlayer,
+                        getNumInLineForWin());
             case 2:
                 while (gomokuBoard[row][column] != Square.EMPTY.toChar()) {
                     return Outcome.GAME_NOT_OVER;
@@ -186,7 +187,8 @@ public class Gomoku implements GomokuModel{
     private Outcome humanPlayer(int row, int column) {
         currentPlayer = Square.RING.toChar();
         gomokuBoard[row][column] = currentPlayer;
-        Outcome outcomeResult = winDetection(row, column, currentPlayer);
+        Outcome outcomeResult = winDetection(row, column, currentPlayer,
+                getNumInLineForWin());
         if (outcomeResult.equals(Outcome.RING_WINS)) {
             return outcomeResult;
         } else if (outcomeResult.equals(Outcome.DRAW)) {
@@ -218,7 +220,7 @@ public class Gomoku implements GomokuModel{
 
         gomokuBoard[row][column] = Square.CROSS.toChar();
         currentPlayer = Square.CROSS.toChar();
-        return winDetection(row, column, currentPlayer);
+        return winDetection(row, column, currentPlayer, getNumInLineForWin());
     }
     /**
      *Method for slightly more advanced computer player using location of
@@ -237,11 +239,13 @@ public class Gomoku implements GomokuModel{
         int x = column;
         int x1 = column;
         int x2 = column;
-        if (x != getNumCols() - 1 && gomokuBoard[y][++x1] == Square.EMPTY.toChar()) {
+        if (x != getNumCols() - 1 && gomokuBoard[y][++x1] ==
+                Square.EMPTY.toChar()) {
             column++;
         } else if (x != 0 && gomokuBoard[y][--x2] == Square.EMPTY.toChar()) {
             column--;
-        } else if (y != getNumRows() - 1 && gomokuBoard[++y1][x] == Square.EMPTY.toChar()) {
+        } else if (y != getNumRows() - 1 && gomokuBoard[++y1][x] ==
+                Square.EMPTY.toChar()) {
             row++;
         } else if (y != 0 && gomokuBoard[--y2][x] == Square.EMPTY.toChar()) {
             row--;
@@ -253,7 +257,7 @@ public class Gomoku implements GomokuModel{
         }
         gomokuBoard[row][column] = Square.CROSS.toChar();
         currentPlayer = Square.CROSS.toChar();
-        return winDetection(row, column, currentPlayer);
+        return winDetection(row, column, currentPlayer, getNumInLineForWin());
     }
     /**
      * Method to determine if a given move has resulted in a win. This method
@@ -265,23 +269,27 @@ public class Gomoku implements GomokuModel{
      * @return Returns outcome WIN if win detected, otherwise GAME NOT OVER or
      * DRAW.
      */
-    private Outcome winDetection(int row, int column, char currentPlayer) {
-        Outcome outcomeResult = winDetectHorizontal(row, column, currentPlayer);
+    private Outcome winDetection(int row, int column, char currentPlayer,
+                                 int numWin) {
+        Outcome outcomeResult = winDetectHorizontal(row, column, currentPlayer,
+         numWin);
         if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
             return outcomeResult;
         }
-        outcomeResult = winDetectVertical(row, column, currentPlayer);
+        outcomeResult = winDetectVertical(row, column, currentPlayer, numWin);
         if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
             return outcomeResult;
         }
-        outcomeResult = winDetectPositiveDiagonal(row, column, currentPlayer);
+        outcomeResult = winDetectPositiveDiagonal(row, column, currentPlayer,
+                numWin);
         if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
             return outcomeResult;
         }
-        outcomeResult = winDetectNegativeDiagonal(row, column, currentPlayer);
+        outcomeResult = winDetectNegativeDiagonal(row, column, currentPlayer,
+                numWin);
         if (outcomeResult != Outcome.GAME_NOT_OVER) {
             setPlayer++;
             return outcomeResult;
@@ -302,22 +310,22 @@ public class Gomoku implements GomokuModel{
      * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectHorizontal(int rowLoc, int columnLoc,
-                                        char currentPlayer) {
+                                        char currentPlayer, int numWin) {
         //This section determines start point for iteration.
         int x = columnLoc;
         while (x > 0 && x > (columnLoc -
-                (getNumInLineForWin() - 1))) {
+                (numWin - 1))) {
             x--;
         }
         //This section determines end point for iteration.
-        int locToStop = columnLoc + (getNumInLineForWin());
+        int locToStop = columnLoc + (numWin);
         int winCount = 0;
         while (x < locToStop && x < getNumCols()) {
             if (gomokuBoard[rowLoc][x] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
             x++;
-            if (winCount == getNumInLineForWin()) {
+            if (winCount == numWin) {
                 if (currentPlayer == Square.CROSS.toChar()) {
                     return Outcome.CROSS_WINS;
                 } else return Outcome.RING_WINS;
@@ -336,22 +344,22 @@ public class Gomoku implements GomokuModel{
      * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectVertical(int rowLoc, int columnLoc,
-                                      char currentPlayer) {
+                                      char currentPlayer, int numWin) {
         //This section determines start point for iteration.
         int y = rowLoc;
         while (y > 0 && y > (rowLoc -
-                (getNumInLineForWin() - 1))) {
+                (numWin - 1))) {
             y--;
         }
         //This section determines end point for iteration.
-        int locToStop = rowLoc + (getNumInLineForWin());
+        int locToStop = rowLoc + numWin;
         int winCount = 0;
         while (y < locToStop && y < getNumRows()) {
             if (gomokuBoard[y][columnLoc] == currentPlayer) {
                 winCount++;
             } else winCount = 0;
             y++;
-            if (winCount == getNumInLineForWin()) {
+            if (winCount == numWin) {
                 if (currentPlayer == Square.CROSS.toChar()) {
                     return Outcome.CROSS_WINS;
                 } else return Outcome.RING_WINS;
@@ -370,21 +378,21 @@ public class Gomoku implements GomokuModel{
      * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectPositiveDiagonal(int rowLoc, int columnLoc,
-                                           char currentPlayer) {
+                                           char currentPlayer, int numWin) {
         //This section determines start point for iteration.
         int y = rowLoc;
         int x = columnLoc;
-        while ((y < (rowLoc + (getNumInLineForWin() - 1))) &&
+        while ((y < (rowLoc + (numWin - 1))) &&
                 (y < (getNumRows() - 1)) &&
-                x > (columnLoc - (getNumInLineForWin() - 1)) &&
+                x > (columnLoc - (numWin - 1)) &&
                 (x > 0)) {
             y++;
             x--;
         }
         //This section determines end point for iteration.
-        int rowLocToStop = rowLoc - (getNumInLineForWin() - 1);
+        int rowLocToStop = rowLoc - (numWin - 1);
         int columnLocToStop = columnLoc +
-                (getNumInLineForWin() - 1);
+                (numWin - 1);
         int winCount = 0;
         while (y >= rowLocToStop && x <= columnLocToStop && x >= 0 &&
                 y >= 0 && x < getNumCols()) {
@@ -393,7 +401,7 @@ public class Gomoku implements GomokuModel{
             } else winCount = 0;
             y--;
             x++;
-            if (winCount == getNumInLineForWin()) {
+            if (winCount == numWin) {
                 if (currentPlayer == Square.CROSS.toChar()) {
                     return Outcome.CROSS_WINS;
                 } else return Outcome.RING_WINS;
@@ -412,21 +420,21 @@ public class Gomoku implements GomokuModel{
      * or cross, otherwise GAME NOT OVER.
      */
     private Outcome winDetectNegativeDiagonal(int rowLoc, int columnLoc,
-                                           char currentPlayer) {
+                                           char currentPlayer, int numWin) {
         //This section determines start point for iteration.
         int y = rowLoc;
         int x = columnLoc;
-        while ((y < (rowLoc + (getNumInLineForWin() - 1))) &&
+        while ((y < (rowLoc + (numWin - 1))) &&
                 (y < (getNumRows() - 1)) &&
-        x < (columnLoc + (getNumInLineForWin() - 1)) &&
+        x < (columnLoc + (numWin - 1)) &&
                 (x < (getNumCols() - 1))) {
             y++;
             x++;
         }
         //This section determines end point for iteration.
-        int rowLocToStop = rowLoc - (getNumInLineForWin() - 1);
+        int rowLocToStop = rowLoc - (numWin - 1);
         int columnLocToStop = columnLoc -
-                (getNumInLineForWin() - 1);
+                (numWin - 1);
         int winCount = 0;
         while (y >= rowLocToStop && x >= columnLocToStop && x >= 0 && y >= 0) {
             if (gomokuBoard[y][x] == currentPlayer) {
@@ -434,7 +442,7 @@ public class Gomoku implements GomokuModel{
             } else winCount = 0;
             y--;
             x--;
-            if (winCount == getNumInLineForWin()) {
+            if (winCount == numWin) {
                 if (currentPlayer == Square.CROSS.toChar()) {
                     return Outcome.CROSS_WINS;
                 } else return Outcome.RING_WINS;
